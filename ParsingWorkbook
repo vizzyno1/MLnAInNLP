@@ -1,0 +1,1015 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled10.ipynb",
+      "provenance": [],
+      "authorship_tag": "ABX9TyOmJQ5tDFKQXkpNmjfuCDvx",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/vizzyno1/MLnAInNLP/blob/main/ParsingWorkbook\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "LheFT_-7gy-b"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "import os"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "YFF0EtoghgU8"
+      },
+      "source": [
+        "import spacy \n",
+        "nlp = spacy.load(\"en_core_web_sm\")"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3ZasvtVfhjfd",
+        "outputId": "94fd7d57-1540-4a33-df25-596440990a80"
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/gdrive')\n",
+        "%cd /gdrive\n"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /gdrive\n",
+            "/gdrive\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4AXC0fB7hlb1",
+        "outputId": "bfd88d7d-dfc6-49f2-bc73-a7c4e0c6d535"
+      },
+      "source": [
+        "os.chdir('/gdrive/MyDrive') # VK path\n",
+        "os.listdir()"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['Backup',\n",
+              " 'Contacts.vcf',\n",
+              " 'EAadhaar_Vijayant.pdf',\n",
+              " 'Covid-19-Delta-Demo (1).gdoc',\n",
+              " 'Covid-19-Delta-Demo.gdoc',\n",
+              " 'Colab Notebooks',\n",
+              " 'Untitled Jam.gjam',\n",
+              " 'dm.pdf',\n",
+              " '.ipynb_checkpoints',\n",
+              " 'Samsung.txt',\n",
+              " 'Kaggle',\n",
+              " 'Project_data',\n",
+              " 'model_init_2021-07-3013_25_42.761348',\n",
+              " 'model_init_2021-07-3013_27_07.986159',\n",
+              " 'model_init_2021-07-3013_28_12.337113',\n",
+              " 'model_init_2021-07-3013_32_22.512379',\n",
+              " 'model_init_2021-07-3014_22_10.568692',\n",
+              " 'model_init_2021-07-3014_29_29.688183',\n",
+              " 'model_init_2021-07-3015_45_38.869815',\n",
+              " 'model_init_2021-07-3016_39_17.890394',\n",
+              " 'model_init_conv_lstm_2021-07-3017_06_31.672628',\n",
+              " 'model_init_2021-07-3017_06_31.672628',\n",
+              " 'model_init_2021-07-3017_35_29.926462',\n",
+              " 'model_init_2021-07-3017_51_02.123452',\n",
+              " 'model_init_2021-07-3018_33_16.469280',\n",
+              " 'model_init_2021-07-3018_55_48.325511',\n",
+              " 'model_init_2021-07-3019_15_56.055043',\n",
+              " 'model_init_2021-07-3019_29_20.347049',\n",
+              " 'model_init_2021-07-3105_33_48.499778',\n",
+              " 'model_init_2021-07-3106_10_23.032844',\n",
+              " 'model_init_2021-07-3106_31_15.896548',\n",
+              " 'model_init_2021-07-3106_36_34.585805',\n",
+              " 'model_init_2021-07-3107_35_52.813902',\n",
+              " 'model_init_2021-07-3107_49_14.512458',\n",
+              " 'model_init_2021-07-3107_55_06.585301',\n",
+              " 'model_init_2021-07-3108_21_42.715940',\n",
+              " 'model_init_2021-07-3108_35_09.613419',\n",
+              " 'model_init_2021-07-3108_44_51.097482',\n",
+              " 'model_init_2021-07-3108_45_39.333250',\n",
+              " 'Assignement_Model_h5',\n",
+              " 'tagged_words.csv']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "tpeVXmjuiOz-"
+      },
+      "source": [
+        "# Load the Samsung.txt dataset\n",
+        "con=open(\"tagged_words.csv\",'r', encoding=\"utf-8\")\n",
+        "words=con.read()\n",
+        "con.close()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "MNiBYFaniTbk",
+        "outputId": "3a7c7875-19fc-4394-fb28-bd7464546a1b"
+      },
+      "source": [
+        "data = pd.read_csv(\"tagged_words.csv\")\n",
+        "sent = \"I saw him running away\"\n",
+        "\n",
+        "def get_common_tag(data,word):\n",
+        "    if word.lower() in data['word'].unique():\n",
+        "        q = f\"word=='{word.lower()}'\"\n",
+        "        return word , data.query(q)['tag'].value_counts().head(1).index.tolist()[0]\n",
+        "    else:\n",
+        "        return f\"{word} not in data\"\n",
+        "\n",
+        "for word in sent.split(\" \"):\n",
+        "    print(get_common_tag(data,word))\n",
+        " \n",
+        "data.query(\"word=='saw'\")['tag'].value_counts()"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "('I', 'PRON')\n",
+            "('saw', 'VERB')\n",
+            "('him', 'PRON')\n",
+            "('running', 'VERB')\n",
+            "('away', 'ADV')\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "VERB    347\n",
+              "NOUN      5\n",
+              "Name: tag, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dhPDg9H1iYLc",
+        "outputId": "fe206fc9-691c-4b91-f2ee-845a8abd2157"
+      },
+      "source": [
+        "data = pd.read_csv(\"tagged_words.csv\")\n",
+        "sent = \"He wished he was rich\"\n",
+        "\n",
+        "def get_common_tag(data,word):\n",
+        "    if word.lower() in data['word'].unique():\n",
+        "        q = f\"word=='{word.lower()}'\"\n",
+        "        return word , data.query(q)['tag'].value_counts().head(1).index.tolist()[0]\n",
+        "    else:\n",
+        "        return f\"{word} not in data\"\n",
+        "\n",
+        "for word in sent.split(\" \"):\n",
+        "    print(get_common_tag(data,word))\n",
+        " \n",
+        "data.query(\"word=='saw'\")['tag'].value_counts()"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "('He', 'PRON')\n",
+            "('wished', 'VERB')\n",
+            "('he', 'PRON')\n",
+            "('was', 'VERB')\n",
+            "('rich', 'ADJ')\n"
+          ]
+        },
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "VERB    347\n",
+              "NOUN      5\n",
+              "Name: tag, dtype: int64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TS87ky3dil0l",
+        "outputId": "f7c7d482-9f3b-4bcb-b2ca-ed9d4d30b849"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "data = pd.read_csv(\"tagged_words.csv\")\n",
+        "emmission_matrix = pd.crosstab(data['word'],data['tag'],normalize='columns')\n",
+        "\n",
+        "\n",
+        "#emmission_matrix[0]\n",
+        "\n",
+        "word = 'his'\n",
+        "emmission_matrix.loc[word][emmission_matrix.loc[word]>0].round(3)\n",
+        "emmission_matrix['PRON'].loc['his'].round(3)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "0.001"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "vAseZLPMjTkP"
+      },
+      "source": [
+        "import spacy\n",
+        "from spacy import displacy\n",
+        "import pandas as pd\n",
+        "nlp = spacy.load(\"en_core_web_sm\")"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "skxBhZ3KYEZm"
+      },
+      "source": [
+        "active = ['Hens lay eggs.',\n",
+        "         'Birds build nests.',\n",
+        "         'The batter hit the ball.',\n",
+        "         'The computer transmitted a copy of the manual']\n",
+        "passive = ['Eggs are laid by hens',\n",
+        "           'Nests are built by birds',\n",
+        "           'The ball was hit by the batter',\n",
+        "           'A copy of the manual was transmitted by the computer.']"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "qck9T9RwYS53"
+      },
+      "source": [
+        "from spacy.matcher import Matcher"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "xDmhISttYUp_"
+      },
+      "source": [
+        "def is_passive(doc,matcher):\n",
+        "    if len(matcher(doc))>0:\n",
+        "        return True\n",
+        "    else:\n",
+        "        return False"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wcdSiC8PYXnn",
+        "outputId": "4e336b1b-7107-427e-9931-fa499623c335"
+      },
+      "source": [
+        "for sent in active:\n",
+        "    doc = nlp(sent)\n",
+        "    print(is_passive(doc,matcher))"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "False\n",
+            "False\n",
+            "False\n",
+            "False\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "jChs_ExLYZxv"
+      },
+      "source": [
+        "passive_rule = [{'DEP':'nsubjpass'}]\n",
+        "matcher = Matcher(nlp.vocab)\n",
+        "matcher.add('Rule',[passive_rule])"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "6rW6yJlnYg_n",
+        "outputId": "6ca4625e-7441-40bd-c184-0239c284f280"
+      },
+      "source": [
+        "matcher(doc)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 8
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wzIR1fRqYkhv",
+        "outputId": "ee2863f6-e41f-4b63-ea7d-14554df2ea95"
+      },
+      "source": [
+        "for sent in passive:\n",
+        "    doc = nlp(sent)\n",
+        "    print(is_passive(doc,matcher))"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "True\n",
+            "True\n",
+            "True\n",
+            "True\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9ZGBBtxKYo_A",
+        "outputId": "ece7f175-4931-4afd-db15-bd5fdf624e7b"
+      },
+      "source": [
+        "rule = [{'DEP':'nsubjpass'}]\n",
+        "matcher = Matcher(nlp.vocab)\n",
+        "matcher.add('Rule',[rule])\n",
+        "\n",
+        "doc = nlp('I am learning NLP from upGrad.')\n",
+        "matcher(doc)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 10
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "q70dK-jyY5pS",
+        "outputId": "e2987b0c-2a9c-47f6-c8c7-7117824aad63"
+      },
+      "source": [
+        "rule = [{'DEP':'nsubjpass'}]\n",
+        "matcher = Matcher(nlp.vocab)\n",
+        "matcher.add('Rule',[rule])\n",
+        "\n",
+        "doc = nlp('Is a book being bought by John?')\n",
+        "matcher(doc)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "[(15740618714089435985, 2, 3)]"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 12
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 421
+        },
+        "id": "aTbMirt0ZAsT",
+        "outputId": "07ff00e2-51f4-4f51-9263-991254913732"
+      },
+      "source": [
+        "displacy.render(doc, style=\"dep\", jupyter = True)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<span class=\"tex2jax_ignore\"><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:lang=\"en\" id=\"514d115fa9d5451d81b1962340eda603-0\" class=\"displacy\" width=\"1275\" height=\"399.5\" direction=\"ltr\" style=\"max-width: none; height: 399.5px; color: #000000; background: #ffffff; font-family: Arial; direction: ltr\">\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"50\">Is</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"50\">AUX</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"225\">a</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"225\">DET</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"400\">book</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"400\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"575\">being</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"575\">AUX</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"750\">bought</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"750\">VERB</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"925\">by</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"925\">ADP</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"309.5\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1100\">John?</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1100\">PROPN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-0\" stroke-width=\"2px\" d=\"M70,264.5 C70,2.0 750.0,2.0 750.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-0\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">aux</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M70,266.5 L62,254.5 78,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-1\" stroke-width=\"2px\" d=\"M245,264.5 C245,177.0 390.0,177.0 390.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-1\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">det</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M245,266.5 L237,254.5 253,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-2\" stroke-width=\"2px\" d=\"M420,264.5 C420,89.5 745.0,89.5 745.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-2\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">nsubjpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M420,266.5 L412,254.5 428,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-3\" stroke-width=\"2px\" d=\"M595,264.5 C595,177.0 740.0,177.0 740.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-3\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">auxpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M595,266.5 L587,254.5 603,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-4\" stroke-width=\"2px\" d=\"M770,264.5 C770,177.0 915.0,177.0 915.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-4\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">agent</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M915.0,266.5 L923.0,254.5 907.0,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-514d115fa9d5451d81b1962340eda603-0-5\" stroke-width=\"2px\" d=\"M945,264.5 C945,177.0 1090.0,177.0 1090.0,264.5\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-514d115fa9d5451d81b1962340eda603-0-5\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">pobj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1090.0,266.5 L1098.0,254.5 1082.0,254.5\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "</svg></span>"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 333
+        },
+        "id": "MqOga_rdcK5L",
+        "outputId": "5a2e9fef-3de4-4d56-ae38-5745a16c5805"
+      },
+      "source": [
+        "doc = nlp('Women are said to live longer than men.')\n",
+        "displacy.render(doc, style=\"dep\", jupyter = True)"
+      ],
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<span class=\"tex2jax_ignore\"><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:lang=\"en\" id=\"556b1ac0e6d849e8b7c73fec22d99403-0\" class=\"displacy\" width=\"1450\" height=\"312.0\" direction=\"ltr\" style=\"max-width: none; height: 312.0px; color: #000000; background: #ffffff; font-family: Arial; direction: ltr\">\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"50\">Women</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"50\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"225\">are</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"225\">AUX</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"400\">said</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"400\">VERB</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"575\">to</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"575\">PART</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"750\">live</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"750\">VERB</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"925\">longer</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"925\">ADV</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1100\">than</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1100\">SCONJ</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1275\">men.</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1275\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-0\" stroke-width=\"2px\" d=\"M70,177.0 C70,2.0 400.0,2.0 400.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-0\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">nsubjpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M70,179.0 L62,167.0 78,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-1\" stroke-width=\"2px\" d=\"M245,177.0 C245,89.5 395.0,89.5 395.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-1\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">auxpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M245,179.0 L237,167.0 253,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-2\" stroke-width=\"2px\" d=\"M595,177.0 C595,89.5 745.0,89.5 745.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-2\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">aux</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M595,179.0 L587,167.0 603,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-3\" stroke-width=\"2px\" d=\"M420,177.0 C420,2.0 750.0,2.0 750.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-3\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">xcomp</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M750.0,179.0 L758.0,167.0 742.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-4\" stroke-width=\"2px\" d=\"M770,177.0 C770,89.5 920.0,89.5 920.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-4\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">advmod</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M920.0,179.0 L928.0,167.0 912.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-5\" stroke-width=\"2px\" d=\"M945,177.0 C945,89.5 1095.0,89.5 1095.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-5\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">prep</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1095.0,179.0 L1103.0,167.0 1087.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-556b1ac0e6d849e8b7c73fec22d99403-0-6\" stroke-width=\"2px\" d=\"M1120,177.0 C1120,89.5 1270.0,89.5 1270.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-556b1ac0e6d849e8b7c73fec22d99403-0-6\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">pobj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1270.0,179.0 L1278.0,167.0 1262.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "</svg></span>"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 528
+        },
+        "id": "NlN6zpjjck-q",
+        "outputId": "9871b501-efeb-4ff8-f179-4d20a242c26b"
+      },
+      "source": [
+        "doc = nlp('etAirways cancelled the flight this morning which was already late.')\n",
+        "displacy.render(doc, style=\"dep\", jupyter = True)"
+      ],
+      "execution_count": 28,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<span class=\"tex2jax_ignore\"><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:lang=\"en\" id=\"d9e7521ec5c54f6db834800c8cc67aca-0\" class=\"displacy\" width=\"1800\" height=\"487.0\" direction=\"ltr\" style=\"max-width: none; height: 487.0px; color: #000000; background: #ffffff; font-family: Arial; direction: ltr\">\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"50\">etAirways</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"50\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"225\">cancelled</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"225\">VERB</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"400\">the</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"400\">DET</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"575\">flight</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"575\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"750\">this</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"750\">DET</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"925\">morning</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"925\">NOUN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1100\">which</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1100\">DET</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1275\">was</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1275\">AUX</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1450\">already</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1450\">ADV</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"397.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"1625\">late.</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"1625\">ADJ</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-0\" stroke-width=\"2px\" d=\"M70,352.0 C70,264.5 210.0,264.5 210.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-0\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">nsubj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M70,354.0 L62,342.0 78,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-1\" stroke-width=\"2px\" d=\"M420,352.0 C420,264.5 560.0,264.5 560.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-1\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">det</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M420,354.0 L412,342.0 428,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-2\" stroke-width=\"2px\" d=\"M245,352.0 C245,177.0 565.0,177.0 565.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-2\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">dobj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M565.0,354.0 L573.0,342.0 557.0,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-3\" stroke-width=\"2px\" d=\"M770,352.0 C770,264.5 910.0,264.5 910.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-3\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">det</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M770,354.0 L762,342.0 778,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-4\" stroke-width=\"2px\" d=\"M245,352.0 C245,89.5 920.0,89.5 920.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-4\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">npadvmod</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M920.0,354.0 L928.0,342.0 912.0,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-5\" stroke-width=\"2px\" d=\"M1120,352.0 C1120,264.5 1260.0,264.5 1260.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-5\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">nsubj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1120,354.0 L1112,342.0 1128,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-6\" stroke-width=\"2px\" d=\"M245,352.0 C245,2.0 1275.0,2.0 1275.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-6\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">advcl</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1275.0,354.0 L1283.0,342.0 1267.0,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-7\" stroke-width=\"2px\" d=\"M1295,352.0 C1295,264.5 1435.0,264.5 1435.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-7\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">advmod</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1435.0,354.0 L1443.0,342.0 1427.0,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-d9e7521ec5c54f6db834800c8cc67aca-0-8\" stroke-width=\"2px\" d=\"M1295,352.0 C1295,177.0 1615.0,177.0 1615.0,352.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-d9e7521ec5c54f6db834800c8cc67aca-0-8\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">acomp</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M1615.0,354.0 L1623.0,342.0 1607.0,342.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "</svg></span>"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "7mc6sQl8c_iU",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 367
+        },
+        "outputId": "879d0c69-468d-42d2-bc1b-ed6bb9699efc"
+      },
+      "source": [
+        "doc = nlp('Dole was defeated by Clinton')\n",
+        "displacy.render(doc, style=\"dep\", jupyter = True)\n",
+        "print(doc)\n",
+        "print(len(list(doc[3].children)))"
+      ],
+      "execution_count": 34,
+      "outputs": [
+        {
+          "output_type": "display_data",
+          "data": {
+            "text/html": [
+              "<span class=\"tex2jax_ignore\"><svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:lang=\"en\" id=\"dabd4529d74e4114a5d181645175c723-0\" class=\"displacy\" width=\"925\" height=\"312.0\" direction=\"ltr\" style=\"max-width: none; height: 312.0px; color: #000000; background: #ffffff; font-family: Arial; direction: ltr\">\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"50\">Dole</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"50\">PROPN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"225\">was</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"225\">AUX</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"400\">defeated</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"400\">VERB</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"575\">by</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"575\">ADP</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<text class=\"displacy-token\" fill=\"currentColor\" text-anchor=\"middle\" y=\"222.0\">\n",
+              "    <tspan class=\"displacy-word\" fill=\"currentColor\" x=\"750\">Clinton</tspan>\n",
+              "    <tspan class=\"displacy-tag\" dy=\"2em\" fill=\"currentColor\" x=\"750\">PROPN</tspan>\n",
+              "</text>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-dabd4529d74e4114a5d181645175c723-0-0\" stroke-width=\"2px\" d=\"M70,177.0 C70,2.0 400.0,2.0 400.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-dabd4529d74e4114a5d181645175c723-0-0\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">nsubjpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M70,179.0 L62,167.0 78,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-dabd4529d74e4114a5d181645175c723-0-1\" stroke-width=\"2px\" d=\"M245,177.0 C245,89.5 395.0,89.5 395.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-dabd4529d74e4114a5d181645175c723-0-1\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">auxpass</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M245,179.0 L237,167.0 253,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-dabd4529d74e4114a5d181645175c723-0-2\" stroke-width=\"2px\" d=\"M420,177.0 C420,89.5 570.0,89.5 570.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-dabd4529d74e4114a5d181645175c723-0-2\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">agent</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M570.0,179.0 L578.0,167.0 562.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "\n",
+              "<g class=\"displacy-arrow\">\n",
+              "    <path class=\"displacy-arc\" id=\"arrow-dabd4529d74e4114a5d181645175c723-0-3\" stroke-width=\"2px\" d=\"M595,177.0 C595,89.5 745.0,89.5 745.0,177.0\" fill=\"none\" stroke=\"currentColor\"/>\n",
+              "    <text dy=\"1.25em\" style=\"font-size: 0.8em; letter-spacing: 1px\">\n",
+              "        <textPath xlink:href=\"#arrow-dabd4529d74e4114a5d181645175c723-0-3\" class=\"displacy-label\" startOffset=\"50%\" side=\"left\" fill=\"currentColor\" text-anchor=\"middle\">pobj</textPath>\n",
+              "    </text>\n",
+              "    <path class=\"displacy-arrowhead\" d=\"M745.0,179.0 L753.0,167.0 737.0,167.0\" fill=\"currentColor\"/>\n",
+              "</g>\n",
+              "</svg></span>"
+            ],
+            "text/plain": [
+              "<IPython.core.display.HTML object>"
+            ]
+          },
+          "metadata": {}
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Dole was defeated by Clinton\n",
+            "1\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "2xPIPrTseJzs"
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
